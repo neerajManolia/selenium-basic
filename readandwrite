@@ -1,0 +1,106 @@
+public class ReadAndWriteExcel {
+@Test
+	public void dataProvider() {
+  		//System.out.println(sE+" "+sN+" "+sP);
+  	}
+  	//@DataProvider (name="dP")
+  	public Object[][]dP() throws IOException{
+  		String fP ="E:\\a project\\ExcelTest.xlsx";
+  		FileInputStream fileInput = new FileInputStream(fP);
+  		try (XSSFWorkbook xwb = new XSSFWorkbook(fileInput)) {
+			XSSFSheet Sheet = xwb.getSheetAt(0);
+			int rows = Sheet.getLastRowNum();
+			int cols =Sheet.getRow(0).getLastCellNum();
+System.out.println(rows+"\n"+cols);
+			Object[][] array = new Object[10][3];
+			for(int r =0;r<=rows;r++) {
+				XSSFRow row = Sheet.getRow(r);
+				for(int c =0;c<cols;c++) {
+					XSSFCell cell = row.getCell(c);
+				System.out.println(cell.getCellType());
+					
+					switch (cell.getCellType()) {
+case STRING:
+						array[r][c] =cell.getStringCellValue();
+//  			System.out.println(array[r][c]);
+						break;
+					case NUMERIC:
+						array[r][c] =cell.getNumericCellValue();
+
+						break;
+					case BOOLEAN:
+						array[r][c]=(cell.getBooleanCellValue());
+						break;
+					default:
+						break;
+	
+
+					}
+					
+				}
+			}
+			return array;
+		}
+    }
+    @AfterMethod
+	public void writeExcel() throws IOException {
+  	  try (XSSFWorkbook wb = new XSSFWorkbook()) {
+		XSSFSheet sheet = wb.createSheet("sheet1");
+		  Object[][] array = new Object[10][3];
+		  array[0][0]="empNo";
+		  array[0][1]="username";
+		  array[0][2]="password";
+		  array[1][0]="1e";
+		  array[1][1]="one";
+		  array[1][2]="one@";
+		  array[2][0]="2e";
+		  array[2][1]="two";
+		  array[2][2] ="two@";
+array[3][0] ="3e";
+		array[3][1] ="three";
+		array[3][2] ="three@";
+		array[4][0] = "4e";
+		array[4][1] ="four";
+		array[4][2] ="four@";
+		array[5][0] ="5e";
+		array[5][1] = "five";
+		array[5][2] ="five@";
+		array[6][0] ="6e";
+		array[6][1] ="six";
+		array[6][2]	="six@";
+		array[7][0]="7e";
+		array[7][1]="seven";
+		array[7][2]="seven@";
+		array[8][0]="8e";
+		array[8][1]="eight";
+		array[8][2]="eight@";
+		array[9][0]="9e";
+		array[9][1]="nine";
+		array[9][2]="nine@";
+int rows = array.length;
+		int cols = array[0].length;
+		System.out.println(rows+"\n"+cols);	
+		for(int r = 0;r<rows;r++) {
+			XSSFRow row = sheet.createRow(r);
+			for(int c=0;c<cols;c++) {
+				XSSFCell cell = row.createCell(c);
+				Object value = array[r][c];
+				if(value instanceof String) {
+					cell.setCellValue((String)value);
+				}
+				if(value instanceof Integer) {
+					cell.setCellValue((Integer)value);
+				}
+				if(value instanceof Boolean) {
+					cell.setCellValue((Boolean)value);
+				
+String filePath = "E:\\a project\\ExcelTest.xlsx";
+			FileOutputStream fileOutPut = new FileOutputStream(filePath);
+			wb.write(fileOutPut);
+		}
+	}
+    
+  
+  	}
+  }
+    
